@@ -6,7 +6,11 @@
 
     <groupId>com.sft</groupId>
     <artifactId>sft</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-alpha.1</version>
+
+    <name>Sensitive Field Filter</name>
+    <description>A lightweight Java field filtering tool that controls API response fields with just two annotations.</description>
+    <url>https://github.com/soora33/sensitive-field-filter</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
