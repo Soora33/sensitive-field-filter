@@ -37,7 +37,7 @@ public class SftAspect {
             Object result = joinPoint.proceed();
 
             if (result != null && !entity.isAssignableFrom(result.getClass())) {
-                logger.error("配置类型与实际返回类型不匹配: 配置类型 [{}], 实际返回类型 [{}]", entity.getName(), result.getClass().getName());
+                logger.error("配置类型与实际返回类型不匹配: 配置类型 【{}】, 实际返回类型 【{}】", entity.getName(), result.getClass().getName());
             }
 
             if (result instanceof Map) {
@@ -90,7 +90,7 @@ public class SftAspect {
             Object result = joinPoint.proceed();
 
             if (result != null && !entity.isAssignableFrom(result.getClass())) {
-                logger.error("配置类型与实际返回类型不匹配: 配置类型 [{}], 实际返回类型 [{}]", entity.getName(), result.getClass().getName());
+                logger.error("配置类型与实际返回类型不匹配: 配置类型 【{}】, 实际返回类型 【{}】", entity.getName(), result.getClass().getName());
                 return result;
             }
 

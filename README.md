@@ -229,9 +229,14 @@ public AjaxResult getUserToRes() {
 
    > 解决方案：使用下面方式进行同类调用 <br>
    ```java
-   public AjaxResult selectUser() {
-        // this.getUser() -> ((YourClass)AopContext.currentProxy()).getUser().method();
-        AjaxResult ajaxResultMap = ((UserController) AopContext.currentProxy()).getUser();
-        return AjaxResult.success(person);
-    }
+public void selectPerson() {
+    // this.getUser() -> ((YourClass)AopContext.currentProxy()).getUser().method();
+    AjaxResult ajaxResultMap = ((UserController) AopContext.currentProxy()).getPerson();
+}
+
+@SftResponseFilter(entity = AjaxResult.class)
+public AjaxResult getPerson() {
+    Person person = new Person("1","person","person@email.com");
+    return AjaxResult.success(person);
+}
    ```
