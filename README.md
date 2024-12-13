@@ -25,7 +25,17 @@
 
 ## 🚀 快速开始
 
+项目目前正在内测，很快将发布正式版！目前可先使用测试版
+
 ### 添加依赖
+在项目中添加依赖：
+```xml
+<dependency>
+    <groupId>io.github.soora33</groupId>
+    <artifactId>sft</artifactId>
+    <version>1.0.0-alpha.1</version>
+</dependency>
+```
 
 ### 配置注解
 
@@ -105,7 +115,7 @@ public User getUserToObj() {
 Person(id=1, name=null, email=Nah)
 
 ##### 场景二：直接返回对象的过滤（不保留字段）
-⚠️ `preserveField` 设置为 false，会将返回结果转为 Map
+⚠️ `preserveField` 设置为 false，会将返回结果转为 Map <br>
 ⚠️ `preserveField` 设置为 false 同时使用的是 `SftObjectFilter` 注解，那么返回值类型必须为 Object！
 ```java
 @SftObjectFilter(entity = Person.class, preserveField = false)
