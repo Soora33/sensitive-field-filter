@@ -44,8 +44,14 @@ public class SftAspect {
                 Map<Object, Object> resultMap = (Map<Object, Object>) result;
                 Object value = resultMap.get(key);
                 if (value != null) {
-                    LinkedHashMap<Object, Object> linkedHashMap = SftUtil.filterFieldsToMap(value, preserveField);
-                    resultMap.put(key, linkedHashMap);
+                    if (!preserveField) {
+                        LinkedHashMap<Object, Object> linkedHashMap = SftUtil.filterFieldsToMap(value, preserveField);
+                        resultMap.put(key, linkedHashMap);
+                        return resultMap;
+                    }
+                    SftUtil.filterFields(value);
+                } else {
+                    logger.error("未在封装格式内根据 key 为【{}】找到数据，请配置 key 为对应数据字段名", key);
                 }
                 return resultMap;
             }
@@ -58,9 +64,12 @@ public class SftAspect {
                     Object object = field.get(result);
                     if (!preserveField) {
                         field.set(result, SftUtil.filterFieldsToMap(object, preserveField));
+                        return result;
                     }
                     SftUtil.filterFields(object);
                     return result;
+                } else {
+                    logger.error("未在封装格式内根据 key 为【{}】找到数据，请配置 key 为对应数据字段名", key);
                 }
             }
             return result;
@@ -82,6 +91,7 @@ public class SftAspect {
 
             if (result != null && !entity.isAssignableFrom(result.getClass())) {
                 logger.error("配置类型与实际返回类型不匹配: 配置类型 [{}], 实际返回类型 [{}]", entity.getName(), result.getClass().getName());
+                return result;
             }
 
             if (result != null) {

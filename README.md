@@ -34,6 +34,11 @@
 > 可配置项：
 > 
 > value：过滤后的字段值，默认为 null
+```java
+public @interface SftFilter {
+    String value() default "null";
+}
+```
 
 > @SftObjectFilter： 配置在方法上，适用于直接返回对象，配置后会对该方法的返回值按照 `SftFilter`配置的字段进行过滤
 > 
@@ -42,6 +47,12 @@
 > entity：方法的返回值类型
 > 
 > preserveField：是否需要保留字段，默认为 true
+```java
+public @interface SftObjectFilter {
+    Class<?> entity();
+    boolean preserveField() default true;
+}
+```
 
 >@SftResponseFilter：配置在方法上，适用于封装格式对象，配置后会对该方法的返回值按照 `SftFilter`配置的字段进行过滤（默认获取封装对象中 `data` 中的对象）
 > 
@@ -52,6 +63,13 @@
 > key：封装数据体中存储数据的字段名，默认为 data
 >
 > preserveField：是否需要保留字段，默认为 true
+```java
+public @interface SftResponseFilter {
+    Class<?> entity();
+    String key() default "data";
+    boolean preserveField() default true;
+}
+```
 
 #### ⚠️⚠️⚠️ 注意：如果配置 `preserveField` 为 false，则会将返回值中的实体类对象转为 `LinkedHashMap`。因为去除过滤字段的实现方式是通过将非过滤字段加入到 Map 内实现的。如果对业务有影响，请不要使用！！！
 
@@ -69,6 +87,11 @@ public class User {
 }
 ```
 #### 2.2 使用场景示例
+下面四个场景分别会展示四种情况，按顺序分别是：<br>
+返回 `User` 对象，保留过滤字段 <br>
+返回 `User` 对象，不保留过滤字段 <br>
+返回 `AjaxResult` 封装格式对象，保留过滤字段 <br>
+返回 `AjaxResult` 封装格式对象，不保留过滤字段
 
 ##### 场景一：直接返回对象的过滤
 ```java
@@ -78,7 +101,7 @@ public User getUserToObj() {
     return user;
 }
 ```
-返回结果：
+* 返回结果：
 Person(id=1, name=null, email=Nah)
 
 ##### 场景二：直接返回对象的过滤（不保留字段）
@@ -91,8 +114,10 @@ public Object getUserToObj() {
     return user;
 }
 ```
-返回结果：
+* 返回结果：
 {id=1}
+
+---
 
 下面场景会使用到封装格式对象，封装格式大致分为两种，第一种是以对象的形式，通过 set 字段存储数据，例如：
 ```java
@@ -142,8 +167,8 @@ public class AjaxResultMap extends HashMap<Object,Object> implements Serializabl
 
 无论是哪种方式，`SftResponseFilter` 内部都对其进行了实现，这里以其中一种演示：
 请注意， `@SftResponseFilter` 注解默认会获取封装格式内的 `data` 字段或key。
-如果你的封装格式存放数据不叫 data，请在注解中的 `key` 中指定，例如你的封装格式存放数据叫 `body`
-请在注解中将 `key` 指定为 `body`
+如果你的封装格式存放数据不叫 data，请在注解中的 `key` 中指定。<br> 
+例如你的封装格式存放数据叫 `body`,请在注解中将 `key` 指定为 `body`
 > @SftResponseFilter(entity = AjaxResult.class, key = "body") 
 
 
@@ -155,7 +180,7 @@ public AjaxResult getUserToRes() {
     return AjaxResult.success(user);
 }
 ```
-返回结果：
+* 返回结果：
 ```json
 {
   "msg": "success",
@@ -177,7 +202,7 @@ public AjaxResult getUserToRes() {
     return AjaxResult.success(user);
 }
 ```
-返回结果：
+* 返回结果：
 ```json
 {
   "msg": "success",
