@@ -101,7 +101,31 @@ public class User {
 返回 `User` 对象，保留过滤字段 <br>
 返回 `User` 对象，不保留过滤字段 <br>
 返回 `AjaxResult` 封装格式对象，保留过滤字段 <br>
-返回 `AjaxResult` 封装格式对象，不保留过滤字段
+返回 `AjaxResult` 封装格式对象，不保留过滤字段 <br>
+
+当然也可以对集合类型进行处理，例如: <br>
+返回 `List<User>` 对象 <br>
+返回 `AjaxResult` 对象，封装的数据类型为 `List<User>` <br>
+这里碍于篇幅就不对 List 类型的数据做细致演示，使用方法都一样，如：
+
+```java
+@SftObjectFilter(entity = Person.class)
+public List<Person> getUserList() {
+    Person azki = new Person("1", "azki", "azki@email.com");
+    Person nayuta = new Person("2", "nayuta", "nayuta@email.com");
+    ArrayList<Person> list = Lists.newArrayList(azki, nayuta);
+    return list;
+}
+
+@SftResponseFilter(entity = AjaxResult.class)
+public AjaxResult getUserList() {
+    Person azki = new Person("1", "azki", "azki@email.com");
+    Person nayuta = new Person("2", "nayuta", "nayuta@email.com");
+    ArrayList<Person> list = Lists.newArrayList(azki, nayuta);
+    return AjaxResult.success(list);
+}
+```
+
 
 ##### 场景一：直接返回对象的过滤
 ```java
