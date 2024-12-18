@@ -1,7 +1,6 @@
 package com.sft.util;
 
 import com.sft.anno.SftFilter;
-import com.sft.aop.SftAspect;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class SftUtil {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SftAspect.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SftUtil.class);
 
     public static <T> void filterFields(T entity) {
         if (entity == null) {
