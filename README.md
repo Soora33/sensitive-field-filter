@@ -33,7 +33,7 @@
 <dependency>
     <groupId>io.github.soora33</groupId>
     <artifactId>sft</artifactId>
-    <version>1.0.0-alpha.1</version>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
