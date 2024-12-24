@@ -25,15 +25,13 @@
 
 ## 🚀 快速开始
 
-项目目前正在内测，很快将发布正式版！目前可先使用测试版
-
 ### 添加依赖
 在项目中添加依赖：
 ```xml
 <dependency>
     <groupId>io.github.soora33</groupId>
     <artifactId>sft</artifactId>
-    <version>1.0.0-beta.1</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -246,6 +244,19 @@ public AjaxResult getUserToRes() {
   }
 }
 ```
+
+#### 2.3 其他配置
+可以通过 `SftConfig` 对一些参数进行调整：
+
+严格规则校验：在错误配置的情况下，考虑到程序健全性，可以选择是否将原数据返回。默认为 `false`
+> // 开启严格规则校验<br>
+> SftConfig.setStrictTypeChecking(true);
+
+| 场景                         | 开启前                | 开启后 |
+|----------------------------|--------------------|--------|
+| 实际返回值类型与 entity 类型不一致      | 仅打印 error 日志，返回原数据 | 抛出类型匹配异常 |
+| key 对应字段不存在或 key 内数据为 null | 仅打印 error 日志，返回原数据 | 抛出类型匹配异常 |
+
 
 ## 📃 常见问题
  ### 同类中，主方法内调用被 `@SftObjectFilter` 或 `@SftResponseFilter` 修饰的子方法，过滤失效

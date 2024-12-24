@@ -108,15 +108,24 @@ public class ResponseFilterTemplate extends FilteringAlgorithmsBoard {
         if (isTypeMatched(methodResult)) {
             return true;
         }
-        logTypeMismatch(methodResult);
         return false;
     }
 
     @Override
     protected boolean isTypeMatched(Object methodResult) {
-        // 获取核心数据值
-        Object value = extractValue(methodResult);
+        if (methodResult == null) {
+            logNullResult();
+            return false;
+        }
 
+        // 返回值类型校验
+        if (!this.entity.isAssignableFrom(methodResult.getClass())) {
+            logTypeMismatch(methodResult);
+            return false;
+        }
+
+        // 获取数据体中的数据
+        Object value = extractValue(methodResult);
         if (value == null) {
             return false;
         }
@@ -128,31 +137,17 @@ public class ResponseFilterTemplate extends FilteringAlgorithmsBoard {
             }
         }
 
-        // 返回值类型校验
-        if (!this.entity.isAssignableFrom(methodResult.getClass())) {
-            return false;
-        }
-
-        // 单个对象直接通过
         return true;
     }
 
     @Override
     protected void logTypeMismatch(Object methodResult) {
-        if (methodResult == null) {
-            logNullResult();
-            return;
-        }
-
-        if (!this.entity.isAssignableFrom(methodResult.getClass())) {
-            if (SftConfig.isStrictTypeChecking()) {
-                throw new RuntimeException("响应类型不匹配: 配置类型 【" + this.entity.getName() + "】, " +
-                        "实际类型 【" + methodResult.getClass().getName() + "】");
-            } else {
-                logger.error("响应类型不匹配: 配置类型 【{}】, 实际类型 【{}】",
-                        this.entity.getName(), methodResult.getClass().getName());
-            }
-
+        if (SftConfig.isStrictTypeChecking()) {
+            throw new RuntimeException("响应类型不匹配: 配置类型 【" + this.entity.getName() + "】, " +
+                    "实际类型 【" + (methodResult == null ? null : methodResult.getClass().getName()) + "】");
+        } else {
+            logger.error("响应类型不匹配: 配置类型 【{}】, 实际类型 【{}】",
+                    this.entity.getName(), methodResult == null ? null : methodResult.getClass().getName());
         }
     }
 
@@ -163,31 +158,41 @@ public class ResponseFilterTemplate extends FilteringAlgorithmsBoard {
 
     // 从返回结果中提取需要处理的值
     private Object extractValue(Object result) {
+        if (result == null) {
+            logNullResult();
+            return null;
+        }
+
         if (result instanceof Map) {
             Object keyData = ((Map<?, ?>) result).get(key);
             if (keyData != null) {
                 return keyData;
             }
             if (SftConfig.isStrictTypeChecking()) {
-                throw new RuntimeException("根据 key：【" + key + "】 获取数据失败，未找到字段");
+                throw new RuntimeException("根据 key：【" + key + "】 获取数据失败，字段不存在或为 null");
             } else {
-                logger.error("根据 key：【{}】 获取数据失败，未找到字段", key);
+                logger.error("根据 key：【{}】 获取数据失败，字段不存在或为 null", key);
             }
+            return null;
         }
 
         try {
             Field field = getField(result.getClass(), key);
             if (field != null) {
                 field.setAccessible(true);
-                return field.get(result);
+                Object keyData = field.get(result);
+                if (keyData != null) {
+                    return keyData;
+                }
             }
         } catch (Exception e) {
             logger.error("获取字段值失败", e);
         }
+
         if (SftConfig.isStrictTypeChecking()) {
-            throw new RuntimeException("根据 key：【" + key + "】 获取数据失败，未找到字段");
+            throw new RuntimeException("根据 key：【" + key + "】 获取数据失败，字段不存在或为 null");
         } else {
-            logger.error("根据 key：【{}】 获取数据失败，未找到字段", key);
+            logger.error("根据 key：【{}】 获取数据失败，字段不存在或为 null", key);
         }
         return null;
     }

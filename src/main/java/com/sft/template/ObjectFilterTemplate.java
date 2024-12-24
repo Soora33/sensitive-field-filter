@@ -104,7 +104,6 @@ public class ObjectFilterTemplate extends FilteringAlgorithmsBoard{
         if (isTypeMatched(methodResult)) {
             return true;
         }
-        logTypeMismatch(methodResult);
         return false;
     }
 
@@ -126,21 +125,32 @@ public class ObjectFilterTemplate extends FilteringAlgorithmsBoard{
             return collection.stream()
                     .filter(Objects::nonNull)
                     .findFirst()
-                    .map(item -> this.entity.isAssignableFrom(item.getClass()))
+                    .map(item -> {
+                        boolean result = this.entity.isAssignableFrom(item.getClass());
+                        if (!result) {
+                            logTypeMismatch(item);
+                        }
+                        return result;
+                    })
                     .orElse(true);
         }
 
-        return this.entity.isAssignableFrom(methodResult.getClass());
+        // 单对象类型判断
+        if (this.entity.isAssignableFrom(methodResult.getClass())) {
+            return true;
+        }
+        logTypeMismatch(methodResult);
+        return false;
     }
 
     @Override
     protected void logTypeMismatch(Object methodResult) {
         if (SftConfig.isStrictTypeChecking()) {
             throw new RuntimeException("响应类型不匹配: 配置类型 【" + this.entity.getName() + "】, " +
-                    "实际类型 【" + methodResult.getClass().getName() + "】");
+                    "实际类型 【" + (methodResult == null ? null : methodResult.getClass().getName()) + "】");
         } else {
             logger.error("响应类型不匹配: 配置类型 【{}】, 实际类型 【{}】",
-                    this.entity.getName(), methodResult.getClass().getName());
+                    this.entity.getName(), methodResult == null ? null : methodResult.getClass().getName());
         }
     }
 

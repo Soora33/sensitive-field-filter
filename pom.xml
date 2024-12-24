@@ -6,7 +6,7 @@
 
     <groupId>io.github.soora33</groupId>
     <artifactId>sft</artifactId>
-    <version>1.0.0-beta.1</version>
+    <version>1.0.0</version>
 
     <name>Sensitive Field Filter</name>
     <description>A lightweight Java field filtering tool that controls API response fields with just two annotations.</description>
@@ -38,6 +38,11 @@
         <aspectj.version>1.9.22.1</aspectj.version>
         <spring.context.version>5.3.14</spring.context.version>
         <slf4j.version>2.0.13</slf4j.version>
+
+        <central-publishing.version>0.6.0</central-publishing.version>
+        <maven-source.version>3.3.1</maven-source.version>
+        <maven-javadoc.version>3.11.2</maven-javadoc.version>
+        <maven-gpg.version>3.2.7</maven-gpg.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -65,6 +70,7 @@
     </dependencies>
 
     <build>
+        <finalName>sft</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -79,11 +85,11 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.5.0</version>
+                <version>${central-publishing.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>soora33</publishingServerId>
-                    <tokenAuth>true</tokenAuth>
+                    <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
 
@@ -91,7 +97,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>${maven-source.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -106,7 +112,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>${maven-javadoc.version}</version>
                 <!--java8或以上 请加入下面的configuration，防止注释不规范导致报错-->
                 <configuration>
                     <doclint>none</doclint>
@@ -125,7 +131,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>${maven-gpg.version}</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
