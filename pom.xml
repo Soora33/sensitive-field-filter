@@ -6,7 +6,7 @@
 
     <groupId>io.github.soora33</groupId>
     <artifactId>sft</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 
     <name>Sensitive Field Filter</name>
     <description>A lightweight Java field filtering tool that controls API response fields with just two annotations.</description>

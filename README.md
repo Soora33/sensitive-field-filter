@@ -31,7 +31,7 @@
 <dependency>
     <groupId>io.github.soora33</groupId>
     <artifactId>sft</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -151,7 +151,7 @@ public Object getUserToObj() {
 
 ---
 
-下面场景会使用到封装格式对象，封装格式大致分为两种，第一种是以对象的形式，通过 set 字段存储数据，例如：
+下面场景会使用到封装格式对象，封装格式大致分为两种，第一种是以对象的形式，通过字段存储数据，例如：
 ```java
 public class AjaxResult implements Serializable {
     @Serial
